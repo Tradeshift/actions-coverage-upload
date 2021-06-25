@@ -1,0 +1,11 @@
+
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "actions-coverage-upload"
+  github.com/project-slug: Tradeshift/actions-coverage-upload
+spec:
+  type: other
+  lifecycle: experimental
+  owner: "developer-productivity"
+  system: ""
