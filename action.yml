@@ -1,0 +1,17 @@
+name: coverage-upload
+description: upload coverage reports to Backstage
+author: Søren Mathiasen
+inputs:
+  server: 
+    description: Server URL
+    default: http://backstage:7000
+    required: false
+  file:
+    description: file path to the coverage file
+    required: true
+  name:
+    description: name of the component in Backstage
+    required: true
+runs:
+  using: node12
+  main: dist/index.js
