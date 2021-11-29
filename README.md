@@ -16,4 +16,9 @@ jobs:
           server: http://backstage:7000
           file: coverage.xml
           name: servicename
+          type: [cobertura|jacoco]
 ```
+
+## building the code
+
+Uses NPM 8/Node 16 or newer

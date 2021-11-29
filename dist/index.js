@@ -35,14 +35,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getInputs = void 0;
+exports.getInputs = exports.CoverageType = void 0;
 const core = __importStar(__nccwpck_require__(186));
+var CoverageType;
+(function (CoverageType) {
+    CoverageType["cobertura"] = "cobertura";
+    CoverageType["jacoco"] = "jacoco";
+})(CoverageType = exports.CoverageType || (exports.CoverageType = {}));
 function getInputs() {
     return __awaiter(this, void 0, void 0, function* () {
+        const coverageType = CoverageType[core.getInput("type")];
         const inputs = {
             name: core.getInput("name"),
             server: core.getInput("server"),
             file: core.getInput("file"),
+            type: coverageType,
         };
         return inputs;
     });
@@ -129,7 +136,7 @@ function run(inputs) {
             `"Content-Type:text/xml"`,
             "-d",
             `@${inputs.file}`,
-            `"${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=cobertura"`,
+            `"${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=${inputs.type}"`,
         ], false);
         if (res.stderr !== "" && !res.success) {
             throw new Error(`Error running gundeck: ${res.stderr}`);

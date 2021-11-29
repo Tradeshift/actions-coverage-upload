@@ -11,7 +11,7 @@ export async function run(inputs: Inputs): Promise<void> {
       `"Content-Type:text/xml"`,
       "-d",
       `@${inputs.file}`,
-      `"${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=cobertura"`,
+      `"${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=${inputs.type}"`,
     ],
     false
   );
