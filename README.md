@@ -17,6 +17,9 @@ jobs:
           file: coverage.xml
           name: servicename
           type: [cobertura|jacoco]
+          ca: ${{ secrets.MTLS_CACERT }}
+          cert: ${{ secrets.MTLS_CERT }}
+          key: ${{ secrets.MTLS_KEY }}
 ```
 
 ## building the code

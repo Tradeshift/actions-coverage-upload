@@ -10,6 +10,10 @@ export interface Inputs {
   server: string;
   file: string;
   type: CoverageType;
+
+  ca: string;
+  cert: string;
+  key: string;
 }
 
 export async function getInputs(): Promise<Inputs> {
@@ -21,6 +25,9 @@ export async function getInputs(): Promise<Inputs> {
     server: core.getInput("server"),
     file: core.getInput("file"),
     type: coverageType,
+    ca: core.getInput("ca"),
+    cert: core.getInput("cert"),
+    key: core.getInput("key"),
   };
   return inputs;
 }

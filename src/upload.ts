@@ -2,19 +2,26 @@ import { Inputs } from "./inputs";
 import { exec } from "@tradeshift/actions-exec";
 
 export async function run(inputs: Inputs): Promise<void> {
-  const res = await exec(
-    "curl",
-    [
-      "-X",
-      "POST",
-      "-H",
-      `"Content-Type:text/xml"`,
-      "-d",
-      `@${inputs.file}`,
-      `"${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=${inputs.type}"`,
-    ],
-    false
-  );
+  const params = [
+    "-X",
+    "POST",
+    "-H",
+    `"Content-Type:text/xml"`,
+    "-d",
+    `"@${inputs.file}"`,
+    `"${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=${inputs.type}"`,
+  ];
+  if (inputs.ca !== undefined && inputs.ca.length > 0) {
+    params.push("--cacert");
+    params.push("/tmp/ca.pem");
+
+    params.push("--cert");
+    params.push(`/tmp/cert.pem`);
+
+    params.push("--key");
+    params.push(`/tmp/key.pem`);
+  }
+  const res = await exec("curl", params, false);
 
   if (res.stderr !== "" && !res.success) {
     throw new Error(`Error running gundeck: ${res.stderr}`);

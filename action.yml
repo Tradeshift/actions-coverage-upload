@@ -4,7 +4,7 @@ author: Søren Mathiasen
 inputs:
   server: 
     description: Server URL
-    default: http://backstage:7000
+    default: https://backstage.ts.sv
     required: false
   file:
     description: file path to the coverage file
@@ -16,7 +16,15 @@ inputs:
     description: the type of the coverage report - cobertura or jacoco
     default: cobertura
     required: false
-
+  ca-cert:
+    description: MTLS ca cert
+    required: false
+  client-cert:
+    description: MTLS client cert
+    required: false
+  client-key:
+    description: MTLS client key
+    required: false
 runs:
   using: node12
   main: dist/index.js
