@@ -26,10 +26,13 @@ jobs:
       - name: run actions-coverage-upload
         uses: ./ # Uses an action in the root directory
         with:
-          server: "http://backstage:7000"
-          file: coverage/clover.xml
+          server: "https://backstage.ts.sv"
+          file: coverage/cobertura-coverage.xml
           name: actions-coverage-upload
           type: cobertura
+          ca-cert: ${{ secrets.MTLS_CACERT }}
+          client-cert: ${{ secrets.MTLS_CERT }}
+          client-key: ${{ secrets.MTLS_KEY }}
 
   release:
     runs-on: ubuntu-latest

@@ -50,6 +50,9 @@ function getInputs() {
             server: core.getInput("server"),
             file: core.getInput("file"),
             type: coverageType,
+            ca: core.getInput("ca-cert"),
+            cert: core.getInput("client-cert"),
+            key: core.getInput("client-key"),
         };
         return inputs;
     });
@@ -95,10 +98,16 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __nccwpck_require__(186);
 const inputs_1 = __nccwpck_require__(180);
 const upload = __importStar(__nccwpck_require__(831));
+const fs = __importStar(__nccwpck_require__(747));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const inputs = yield inputs_1.getInputs();
+            if (inputs.ca !== undefined && inputs.ca.length > 0) {
+                fs.writeFileSync("/tmp/ca.pem", inputs.ca);
+                fs.writeFileSync("/tmp/cert.pem", inputs.cert);
+                fs.writeFileSync("/tmp/key.pem", inputs.key);
+            }
             yield upload.run(inputs);
         }
         catch (error) {
@@ -129,16 +138,24 @@ exports.run = void 0;
 const actions_exec_1 = __nccwpck_require__(291);
 function run(inputs) {
     return __awaiter(this, void 0, void 0, function* () {
-        const res = yield actions_exec_1.exec("curl", [
+        const params = [
             "-X",
             "POST",
             "-H",
-            `Content-Type:text/xml`,
+            `"Content-Type:text/xml"`,
             "-d",
-            `@${inputs.file}`,
-            "--fail-with-body",
-            `${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=${inputs.type}`,
-        ], false);
+            `"@${inputs.file}"`,
+            `"${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=${inputs.type}"`,
+        ];
+        if (inputs.ca !== undefined && inputs.ca.length > 0) {
+            params.push("--cacert");
+            params.push("/tmp/ca.pem");
+            params.push("--cert");
+            params.push(`/tmp/cert.pem`);
+            params.push("--key");
+            params.push(`/tmp/key.pem`);
+        }
+        const res = yield actions_exec_1.exec("curl", params, false);
         if (res.stderr !== "" && !res.success) {
             throw new Error(`Error uploading coverage: ${res.stderr}`);
         }

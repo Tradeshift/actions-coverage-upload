@@ -17,6 +17,10 @@ jobs:
           file: coverage.xml
           name: servicename
           type: [cobertura|jacoco]
+          # optional values for using mutual tls:
+          ca-cert: ${{ secrets.MTLS_CACERT }}
+          client-cert: ${{ secrets.MTLS_CERT }}
+          client-key: ${{ secrets.MTLS_KEY }}
 ```
 
 ## building the code
