@@ -8,15 +8,16 @@ export async function run(inputs: Inputs): Promise<void> {
       "-X",
       "POST",
       "-H",
-      `"Content-Type:text/xml"`,
+      `Content-Type:text/xml`,
       "-d",
       `@${inputs.file}`,
-      `"${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=${inputs.type}"`,
+      "--fail-with-body",
+      `${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=${inputs.type}`,
     ],
     false
   );
 
   if (res.stderr !== "" && !res.success) {
-    throw new Error(`Error running gundeck: ${res.stderr}`);
+    throw new Error(`Error uploading coverage: ${res.stderr}`);
   }
 }
