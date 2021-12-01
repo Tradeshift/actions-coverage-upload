@@ -12,6 +12,11 @@ inputs:
   name:
     description: name of the component in Backstage
     required: true
+  type:
+    description: the type of the coverage report - cobertura or jacoco
+    default: cobertura
+    required: false
+
 runs:
   using: node12
   main: dist/index.js
