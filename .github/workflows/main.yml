@@ -1,0 +1,59 @@
+name: main
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v2
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          cache: "npm"
+
+      - run: npm ci
+      - run: npm run all
+      - name: Check for changes (fail if we forgot to update dist folder)
+        run: git diff --quiet dist
+      # sanity check
+      - name: run actions-coverage-upload
+        uses: ./ # Uses an action in the root directory
+        with:
+          server: "https://backstage.ts.sv"
+          file: coverage/cobertura-coverage.xml
+          name: actions-coverage-upload
+          type: cobertura
+          ca-cert: ${{ secrets.MTLS_CACERT }}
+          client-cert: ${{ secrets.MTLS_CERT }}
+          client-key: ${{ secrets.MTLS_KEY }}
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [build]
+    # Run on non-fork branches only (master/main)
+    if: ${{ !github.event.fork && !contains(github.ref, 'pull') }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: tradeshift/actions-semantic-release@v1
+        id: semantic-release
+        with:
+          branches: |
+            [
+              'master'
+            ]
+          check_name: Semantic release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Action tags (major version tag)
+        if: ${{ steps.semantic-release.outputs.new_release_published }}
+        run: |
+          git tag -f v${{ steps.semantic-release.outputs.new_release_major_version }}
+          git push -f origin v${{ steps.semantic-release.outputs.new_release_major_version }}
