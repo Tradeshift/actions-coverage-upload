@@ -23,7 +23,7 @@ async function run(): Promise<void> {
 
     await upload.run(inputs);
   } catch (error) {
-    setFailed(error.message);
+    setFailed((error as Error).message);
   }
 }
 
