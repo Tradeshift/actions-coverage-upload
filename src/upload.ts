@@ -10,6 +10,8 @@ export async function run(inputs: Inputs): Promise<void> {
     "-d",
     `@${inputs.file}`,
     `${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=${inputs.type}`,
+    "--write-out",
+    "HTTP:%{http_code}",
   ];
   if (inputs.ca !== undefined && inputs.ca.length > 0) {
     params.push("--cacert");
@@ -23,6 +25,9 @@ export async function run(inputs: Inputs): Promise<void> {
   }
   const res = await exec("curl", params, false);
 
+  if (!/HTTP:201$/.exec(res.stdout)) {
+    throw new Error(`Error uploading coverage`);
+  }
   if (res.stderr !== "" && !res.success) {
     throw new Error(`Error uploading coverage: ${res.stderr}`);
   }

@@ -153,6 +153,8 @@ function run(inputs) {
             "-d",
             `@${inputs.file}`,
             `${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=${inputs.type}`,
+            "--write-out",
+            "HTTP:%{http_code}",
         ];
         if (inputs.ca !== undefined && inputs.ca.length > 0) {
             params.push("--cacert");
@@ -163,6 +165,9 @@ function run(inputs) {
             params.push(`/tmp/key.pem`);
         }
         const res = yield actions_exec_1.exec("curl", params, false);
+        if (!/HTTP:201$/.exec(res.stdout)) {
+            throw new Error(`Error uploading coverage`);
+        }
         if (res.stderr !== "" && !res.success) {
             throw new Error(`Error uploading coverage: ${res.stderr}`);
         }
