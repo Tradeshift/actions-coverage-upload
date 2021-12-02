@@ -44,15 +44,15 @@ var CoverageType;
 })(CoverageType = exports.CoverageType || (exports.CoverageType = {}));
 function getInputs() {
     return __awaiter(this, void 0, void 0, function* () {
-        const coverageType = CoverageType[core.getInput("type")];
+        const coverageType = CoverageType[core.getInput('type')];
         const inputs = {
-            name: core.getInput("name"),
-            server: core.getInput("server"),
-            file: core.getInput("file"),
+            name: core.getInput('name'),
+            server: core.getInput('server'),
+            file: core.getInput('file'),
             type: coverageType,
-            ca: core.getInput("ca-cert"),
-            cert: core.getInput("client-cert"),
-            key: core.getInput("client-key"),
+            ca: core.getInput('ca-cert'),
+            cert: core.getInput('client-cert'),
+            key: core.getInput('client-key'),
         };
         return inputs;
     });
@@ -103,7 +103,7 @@ const fs = __importStar(__nccwpck_require__(747));
 function processCert(cert) {
     const isBase64Exp = /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$/;
     if (isBase64Exp.exec(cert)) {
-        return Buffer.from(cert, "base64").toString("utf-8");
+        return Buffer.from(cert, 'base64').toString('utf-8');
     }
     return cert;
 }
@@ -112,9 +112,9 @@ function run() {
         try {
             const inputs = yield (0, inputs_1.getInputs)();
             if (inputs.ca !== undefined && inputs.ca.length > 0) {
-                fs.writeFileSync("/tmp/ca.pem", processCert(inputs.ca));
-                fs.writeFileSync("/tmp/cert.pem", processCert(inputs.cert));
-                fs.writeFileSync("/tmp/key.pem", processCert(inputs.key));
+                fs.writeFileSync('/tmp/ca.pem', processCert(inputs.ca));
+                fs.writeFileSync('/tmp/cert.pem', processCert(inputs.cert));
+                fs.writeFileSync('/tmp/key.pem', processCert(inputs.key));
             }
             yield upload.run(inputs);
         }
@@ -148,29 +148,29 @@ const actions_exec_1 = __nccwpck_require__(291);
 function run(inputs) {
     return __awaiter(this, void 0, void 0, function* () {
         const params = [
-            "-X",
-            "POST",
-            "-H",
+            '-X',
+            'POST',
+            '-H',
             `Content-Type:text/xml`,
-            "-d",
+            '-d',
             `@${inputs.file}`,
             `${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=${inputs.type}`,
-            "--write-out",
-            "HTTP:%{http_code}",
+            '--write-out',
+            'HTTP:%{http_code}',
         ];
         if (inputs.ca !== undefined && inputs.ca.length > 0) {
-            params.push("--cacert");
-            params.push("/tmp/ca.pem");
-            params.push("--cert");
+            params.push('--cacert');
+            params.push('/tmp/ca.pem');
+            params.push('--cert');
             params.push(`/tmp/cert.pem`);
-            params.push("--key");
+            params.push('--key');
             params.push(`/tmp/key.pem`);
         }
-        const res = yield (0, actions_exec_1.exec)("curl", params, false);
+        const res = yield (0, actions_exec_1.exec)('curl', params, false);
         if (!/HTTP:201$/.exec(res.stdout)) {
             throw new Error(`Error uploading coverage`);
         }
-        if (res.stderr !== "" && !res.success) {
+        if (res.stderr !== '' && !res.success) {
             throw new Error(`Error uploading coverage: ${res.stderr}`);
         }
     });
