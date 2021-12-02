@@ -142,10 +142,10 @@ function run(inputs) {
             "-X",
             "POST",
             "-H",
-            `"Content-Type:text/xml"`,
+            `Content-Type:text/xml`,
             "-d",
-            `"@${inputs.file}"`,
-            `"${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=${inputs.type}"`,
+            `@${inputs.file}`,
+            `${inputs.server}/api/code-coverage/report?entity=component:default/${inputs.name}&coverageType=${inputs.type}`,
         ];
         if (inputs.ca !== undefined && inputs.ca.length > 0) {
             params.push("--cacert");
