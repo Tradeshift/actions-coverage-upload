@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 12
-          cache: "npm"
+          cache: 'npm'
 
       - run: npm ci
       - run: npm run all
@@ -26,7 +26,7 @@ jobs:
       - name: run actions-coverage-upload
         uses: ./ # Uses an action in the root directory
         with:
-          server: "https://backstage.ts.sv"
+          server: 'https://backstage.ts.sv'
           file: coverage/cobertura-coverage.xml
           name: actions-coverage-upload
           type: cobertura
@@ -44,14 +44,9 @@ jobs:
       - uses: tradeshift/actions-semantic-release@v1
         id: semantic-release
         with:
-          branches: |
-            [
-              'master'
-            ]
           check_name: Semantic release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Action tags (major version tag)
         if: ${{ steps.semantic-release.outputs.new_release_published }}
         run: |
