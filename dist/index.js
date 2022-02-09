@@ -102,7 +102,7 @@ const upload = __importStar(__nccwpck_require__(831));
 const fs = __importStar(__nccwpck_require__(747));
 function processCert(cert) {
     const isBase64Exp = /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$/;
-    if (isBase64Exp.exec(cert)) {
+    if (isBase64Exp.exec(cert.replace(/\n/g, ''))) {
         return Buffer.from(cert, 'base64').toString('utf-8');
     }
     return cert;
