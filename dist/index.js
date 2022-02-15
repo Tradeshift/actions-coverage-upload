@@ -144,7 +144,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
-const actions_exec_1 = __nccwpck_require__(291);
+const exec_1 = __nccwpck_require__(514);
 function run(inputs) {
     return __awaiter(this, void 0, void 0, function* () {
         const params = [
@@ -166,11 +166,11 @@ function run(inputs) {
             params.push('--key');
             params.push(`/tmp/key.pem`);
         }
-        const res = yield (0, actions_exec_1.exec)('curl', params, false);
+        const res = yield (0, exec_1.getExecOutput)('curl', params, { silent: false });
         if (!/HTTP:201$/.exec(res.stdout)) {
             throw new Error(`Error uploading coverage`);
         }
-        if (res.stderr !== '' && !res.success) {
+        if (res.stderr !== '' && res.exitCode !== 0) {
             throw new Error(`Error uploading coverage: ${res.stderr}`);
         }
     });
@@ -2718,53 +2718,6 @@ function copyFile(srcFile, destFile, force) {
     });
 }
 //# sourceMappingURL=io.js.map
-
-/***/ }),
-
-/***/ 291:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.exec = void 0;
-const exec_1 = __nccwpck_require__(514);
-function exec(command, args = [], silent, stdin) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let stdout = '';
-        let stderr = '';
-        const options = {
-            silent,
-            ignoreReturnCode: true,
-            input: Buffer.from(stdin || '')
-        };
-        options.listeners = {
-            stdout: (data) => {
-                stdout += data.toString();
-            },
-            stderr: (data) => {
-                stderr += data.toString();
-            }
-        };
-        const returnCode = yield exec_1.exec(command, args, options);
-        return {
-            success: returnCode === 0,
-            stdout: stdout.trim(),
-            stderr: stderr.trim()
-        };
-    });
-}
-exports.exec = exec;
-//# sourceMappingURL=exec.js.map
 
 /***/ }),
 
