@@ -13,13 +13,15 @@ export async function run(inputs: Inputs): Promise<void> {
     '--write-out',
     'HTTP:%{http_code}',
   ];
-  if (inputs.ca !== undefined && inputs.ca.length > 0) {
+  if (inputs.ca) {
     params.push('--cacert');
     params.push('/tmp/ca.pem');
-
+  }
+  if (inputs.cert) {
     params.push('--cert');
     params.push(`/tmp/cert.pem`);
-
+  }
+  if (inputs.key) {
     params.push('--key');
     params.push(`/tmp/key.pem`);
   }

@@ -113,7 +113,11 @@ function run() {
             const inputs = yield (0, inputs_1.getInputs)();
             if (inputs.ca !== undefined && inputs.ca.length > 0) {
                 fs.writeFileSync('/tmp/ca.pem', processCert(inputs.ca));
+            }
+            if (inputs.cert !== undefined && inputs.cert.length > 0) {
                 fs.writeFileSync('/tmp/cert.pem', processCert(inputs.cert));
+            }
+            if (inputs.key !== undefined && inputs.key.length > 0) {
                 fs.writeFileSync('/tmp/key.pem', processCert(inputs.key));
             }
             yield upload.run(inputs);
@@ -158,11 +162,15 @@ function run(inputs) {
             '--write-out',
             'HTTP:%{http_code}',
         ];
-        if (inputs.ca !== undefined && inputs.ca.length > 0) {
+        if (inputs.ca) {
             params.push('--cacert');
             params.push('/tmp/ca.pem');
+        }
+        if (inputs.cert) {
             params.push('--cert');
             params.push(`/tmp/cert.pem`);
+        }
+        if (inputs.key) {
             params.push('--key');
             params.push(`/tmp/key.pem`);
         }
