@@ -2,6 +2,7 @@
 name: Tries to fix node dependency issues
 on:
   # For master pushes, check images
+  pull_request:
   push:
     
   # Allow running manually
