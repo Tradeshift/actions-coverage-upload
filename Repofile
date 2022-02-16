@@ -1,8 +1,12 @@
 {
-	"maintainers": [
-		"Developer productivity"
-	],
-	"checks": [
-		"build"
-	]
+    "maintainers": [
+        "Developer productivity"
+    ],
+    "checks": [
+        "build"
+    ],
+    "topics": [
+        "github-action",
+        "nodejs"
+    ]
 }
