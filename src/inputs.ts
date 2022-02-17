@@ -11,9 +11,9 @@ export interface Inputs {
   file: string;
   type: CoverageType;
 
-  ca: string;
-  cert: string;
-  key: string;
+  ca?: string;
+  cert?: string;
+  key?: string;
 }
 
 export async function getInputs(): Promise<Inputs> {

@@ -1,5 +1,5 @@
 import { Inputs } from './inputs';
-import { exec } from '@tradeshift/actions-exec';
+import { getExecOutput } from '@actions/exec';
 
 export async function run(inputs: Inputs): Promise<void> {
   const params = [
@@ -13,22 +13,24 @@ export async function run(inputs: Inputs): Promise<void> {
     '--write-out',
     'HTTP:%{http_code}',
   ];
-  if (inputs.ca !== undefined && inputs.ca.length > 0) {
+  if (inputs.ca) {
     params.push('--cacert');
     params.push('/tmp/ca.pem');
-
+  }
+  if (inputs.cert) {
     params.push('--cert');
     params.push(`/tmp/cert.pem`);
-
+  }
+  if (inputs.key) {
     params.push('--key');
     params.push(`/tmp/key.pem`);
   }
-  const res = await exec('curl', params, false);
+  const res = await getExecOutput('curl', params, { silent: false });
 
   if (!/HTTP:201$/.exec(res.stdout)) {
     throw new Error(`Error uploading coverage`);
   }
-  if (res.stderr !== '' && !res.success) {
+  if (res.stderr !== '' && res.exitCode !== 0) {
     throw new Error(`Error uploading coverage: ${res.stderr}`);
   }
 }

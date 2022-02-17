@@ -17,7 +17,11 @@ async function run(): Promise<void> {
     const inputs = await getInputs();
     if (inputs.ca !== undefined && inputs.ca.length > 0) {
       fs.writeFileSync('/tmp/ca.pem', processCert(inputs.ca));
+    }
+    if (inputs.cert !== undefined && inputs.cert.length > 0) {
       fs.writeFileSync('/tmp/cert.pem', processCert(inputs.cert));
+    }
+    if (inputs.key !== undefined && inputs.key.length > 0) {
       fs.writeFileSync('/tmp/key.pem', processCert(inputs.key));
     }
 
