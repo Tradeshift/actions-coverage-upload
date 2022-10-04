@@ -9,7 +9,7 @@ on: [push]
 
 jobs:
   coverage-upload:
-    runs-on: self-hosted
+    runs-on: [self-hosted,ts-large-x64-docker-large]
     steps:
       - uses: tradeshift/actions-coverage-upload@v1
         with:
