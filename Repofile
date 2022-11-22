@@ -1,6 +1,6 @@
 {
     "maintainers": [
-        "Developer productivity"
+        "developer-productivity"
     ],
     "checks": [
         "build"
