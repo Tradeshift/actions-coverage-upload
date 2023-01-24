@@ -11,27 +11,22 @@ jobs:
       needs-update: ${{ steps.diff.outcome != 'success' }}
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v2
-
-      - name: ⎔ Setup node 16
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-          cache: 'npm'
+        uses: actions/checkout@v3
 
       - run: npm ci
       - run: npm run all
+      - run: node mock-server.js &
       # sanity check
       - name: run actions-coverage-upload
         uses: ./ # Uses an action in the root directory
         with:
-          server: 'https://backstage.ts.sv'
+          server: "http://localhost:8080"
           file: coverage/cobertura-coverage.xml
           name: actions-coverage-upload
           type: cobertura
-          ca-cert: ${{ secrets.MTLS_CACERT }}
-          client-cert: ${{ secrets.MTLS_CERT }}
-          client-key: ${{ secrets.MTLS_KEY }}
+          # ca-cert: ${{ secrets.MTLS_CACERT }}
+          # client-cert: ${{ secrets.MTLS_CERT }}
+          # client-key: ${{ secrets.MTLS_KEY }}
 
       - name: Check for changes (fail if we forgot to update dist folder)
         run: git diff --quiet dist
