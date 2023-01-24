@@ -64,7 +64,7 @@ jobs:
     # Run on non-fork branches only (master/main)
     if: ${{ !github.event.fork && !contains(github.ref, 'pull') && needs.build.outputs.needs-update != 'true'}}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: tradeshift/actions-semantic-release@v1
         id: semantic-release
         with:
