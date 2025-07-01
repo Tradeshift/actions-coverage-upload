@@ -38,7 +38,7 @@
     "eslint-plugin-jest": "28.14.0",
     "jest": "30.0.3",
     "jest-circus": "30.0.3",
-    "prettier": "3.5.3",
+    "prettier": "3.6.2",
     "ts-jest": "29.4.0",
     "typescript": "5.8.3"
   }
