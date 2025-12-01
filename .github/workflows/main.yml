@@ -11,7 +11,7 @@ jobs:
       needs-update: ${{ steps.diff.outcome != 'success' }}
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - run: npm ci
       - run: npm run all
@@ -64,7 +64,7 @@ jobs:
     # Run on non-fork branches only (master/main)
     if: ${{ !github.event.fork && !contains(github.ref, 'pull') && needs.build.outputs.needs-update != 'true'}}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: tradeshift/actions-semantic-release@v2
         id: semantic-release
         with:
