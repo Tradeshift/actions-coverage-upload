@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
       - name: Fetch PR
         if: contains(github.ref, 'pull')
         run: |
           git fetch origin ${{ github.event.pull_request.head.sha }}
           git checkout ${{ github.event.pull_request.head.sha }}
       - name: SonarQube Scan
-        uses: tradeshift/actions-sonarqube@v2
+        uses: tradeshift/actions-sonarqube@v2.8.7
         with:
           ca-cert: ${{ secrets.MTLS_CACERT }}
           client-cert: ${{ secrets.MTLS_CERT }}
