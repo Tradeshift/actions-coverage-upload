@@ -11,7 +11,7 @@ jobs:
       needs-update: ${{ steps.diff.outcome != 'success' }}
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - run: npm ci --ignore-scripts
       - run: npm run all
@@ -36,12 +36,12 @@ jobs:
       - name: Set up commit signing w/ GPG
         if: ${{ steps.diff.outcome != 'success' && !github.event.fork && !contains(github.ref, 'pull') }}
         id: configure
-        uses: tradeshift/actions-git/configure-from-gpg-key@v1
+        uses: tradeshift/actions-git/configure-from-gpg-key@v1.0.2
         with:
           gpg-key: ${{ secrets.TRADESHIFTCI_GPG_KEY }}
 
       - name: PR build changes if needed
-        uses: tradeshift/create-pull-request@v8
+        uses: tradeshift/create-pull-request@v8.1.1
         if: ${{ steps.diff.outcome != 'success' && !github.event.fork && !contains(github.ref, 'pull') }}
         with:
           commit-message: "build: update dist folder"
@@ -64,8 +64,8 @@ jobs:
     # Run on non-fork branches only (master/main)
     if: ${{ !github.event.fork && !contains(github.ref, 'pull') && needs.build.outputs.needs-update != 'true'}}
     steps:
-      - uses: actions/checkout@v7
-      - uses: tradeshift/actions-semantic-release@v2
+      - uses: actions/checkout@v7.0.1
+      - uses: tradeshift/actions-semantic-release@v2.1.0
         id: semantic-release
         with:
           check_name: Semantic release
